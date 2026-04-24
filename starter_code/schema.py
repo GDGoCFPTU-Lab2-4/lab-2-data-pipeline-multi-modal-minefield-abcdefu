@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import Any, Dict, Optional
 from datetime import datetime
 
 # ==========================================
@@ -9,14 +9,13 @@ from datetime import datetime
 # This is v1. Note: A breaking change is coming at 11:00 AM!
 
 class UnifiedDocument(BaseModel):
-    # TODO: Define the v1 schema. 
-    # Suggested fields: document_id, content, source_type, author, timestamp, metadata
-    
+    """Canonical v1 document shape for all ingestion sources."""
+
     document_id: str
     content: str
-    source_type: str # e.g., 'PDF', 'Video', 'HTML', 'CSV', 'Code'
+    source_type: str  # e.g., 'PDF', 'Video', 'HTML', 'CSV', 'Code'
     author: Optional[str] = "Unknown"
     timestamp: Optional[datetime] = None
-    
-    # You might want a dict for source-specific metadata
-    source_metadata: dict = Field(default_factory=dict)
+
+    # Source-specific attributes that do not belong in top-level fields.
+    source_metadata: Dict[str, Any] = Field(default_factory=dict)
